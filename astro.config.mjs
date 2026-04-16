@@ -6,7 +6,7 @@
 //   integrations: [react(), tailwind()],
 //   output: "static", // S3 정적 배포를 위한 설정
 // });
-
+// Astro 설정 (React, Tailwind 통합 설정)
 import { defineConfig } from "astro/config";
 import react from "@astrojs/react";
 import tailwindcss from "@tailwindcss/vite"; // 이 부분이 @tailwindcss/vite 인지 확인

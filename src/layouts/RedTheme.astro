@@ -1,0 +1,18 @@
+---
+// src/layouts/RedTheme.astro
+const { title } = Astro.props;
+---
+<html lang="ko">
+  <head>
+    <meta charset="utf-8" />
+    <title>{title}</title>
+  </head>
+  <body class="bg-red-50 text-red-900 min-h-screen">
+    <header class="p-6 bg-red-600 text-white shadow-lg">
+      <h1 class="text-2xl font-bold">Red Brand Logo</h1>
+    </header>
+    <main class="container mx-auto p-10 bg-white mt-10 rounded-xl shadow-sm">
+      <slot /> <!-- 여기에 페이지 내용이 들어감 -->
+    </main>
+  </body>
+</html>

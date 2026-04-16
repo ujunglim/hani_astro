@@ -1,16 +1,29 @@
 ---
-// 서버에서 빌드 시점에 한번만 실행됨
-import '../styles/global.css';
-const theme = import.meta.env.SITE_THEME;
-const bgColor = theme === 'theme-red' ? 'bg-red-100' : 'bg-blue-100';
+// 메인 페이지 (여기서 DB 데이터를 읽고 테마 결정)
+// src/pages/index.astro
+import '../styles/global.css'
+import { getSiteData } from '../lib/dynamodb';
+import RedTheme from '../layouts/RedTheme.astro';
+import BlueTheme from '../layouts/BlueTheme.astro'; // BlueTheme도 위와 유사하게 생성
+
+// 1. 빌드 명령 시 주입한 SITE_ID (예: SITE_ID=customer1 npm run build)
+const siteId = import.meta.env.SITE_ID || 'default_id';
+
+// 2. DynamoDB에서 해당 사이트의 콘텐츠와 테마 정보 가져오기
+const data = await getSiteData(siteId);
+
+if (!data) {
+  return Astro.redirect('/404');
+}
+
+// 3. DB에 저장된 selectedTheme ('red' 또는 'blue')에 따라 레이아웃 선택
+const Theme = data.selectedTheme === 'blue' ? BlueTheme : RedTheme;
 ---
 
-
-<html lang="ko">
-	<head>
-		<title>{theme} 테스트</title>
-	</head>
-	<body class={`flex items-center justify-center h-screen text-white font-bold ${bgColor}`}>
-		<h1 class="text-4xl">현재 테마: {theme}</h1>
-	</body>
-</html>
+<Theme title={data.seoTitle}>
+  <article class="prose lg:prose-xl mx-auto">
+    <h1 class="text-4xl font-extrabold mb-4">{data.headline}</h1>
+    <!-- DB에 저장된 마크업(HTML)을 그대로 렌더링, dangerouslySetInnerHTML와 같음 -->
+    <div set:html={data.mainContent} />
+  </article>
+</Theme>
