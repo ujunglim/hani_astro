@@ -1,0 +1,18 @@
+---
+// src/layouts/MainLayout.astro
+import BaseHead from '../components/BaseHead.astro';
+
+const { seoData, theme } = Astro.props;
+const themeClass = theme === 'blue' ? 'bg-blue-50' : 'bg-red-50';
+---
+
+<html lang="ko">
+  <BaseHead 
+    title={seoData.title} 
+    description={seoData.description} 
+    image={seoData.image} 
+  />
+  <body class={themeClass}>
+    <slot />
+  </body>
+</html>
